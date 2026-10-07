@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Translator Pro - Free Fast Online Translation Tool</title>
+  <meta name="description" content="Translate long articles, sentences, and documents instantly across 15+ languages including English, Urdu, Hindi, Arabic, Spanish, and French. Free, fast, and private.">
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --bg-input: #0f172a;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-color: #3b82f6;
+      --accent-hover: #2563eb;
+      --border-color: #334155;
+      --success-color: #10b981;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-input: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent-color: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border-color: #e2e8f0;
+      --success-color: #059669;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--accent-color);
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .translator-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      font-size: 1rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .swap-btn {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .swap-btn:hover {
+      border-color: var(--accent-color);
+      transform: rotate(180deg);
+    }
+
+    .panels-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .panels-container {
+        grid-template-columns: 1fr;
+      }
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+      .swap-btn {
+        margin: 0 auto;
+      }
+      nav {
+        display: none;
+      }
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 250px;
+      padding: 1rem;
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      resize: vertical;
+      font-size: 1.05rem;
+      outline: none;
+      line-height: 1.6;
+    }
+
+    textarea:focus {
+      border-color: var(--accent-color);
+    }
+
+    .panel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .counter {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .btn:hover {
+      border-color: var(--accent-color);
+    }
+
+    .btn-primary {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .share-section {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .share-title {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-whatsapp { background-color: #25d366; color: white; border: none; }
+    .btn-facebook { background-color: #1877f2; color: white; border: none; }
+    .btn-twitter { background-color: #000000; color: white; border: 1px solid #333; }
+    .btn-telegram { background-color: #229ed9; color: white; border: none; }
+    .btn-linkedin { background-color: #0a66c2; color: white; border: none; }
+
+    .content-section {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .content-section h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .content-section p, .content-section ul {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .content-section ul {
+      padding-left: 1.5rem;
+    }
+
+    .faq-item {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .faq-question {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      background-color: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">AI</div>
+      <div class="logo-text">AI Translator Pro</div>
+    </div>
+    <nav>
+      <a href="#translator">Translator</a>
+      <a href="#about">About</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#terms">Terms</a>
+      <a href="#disclaimer">Disclaimer</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle">🌙 Theme</button>
+  </header>
+
+  <main>
+    <section class="hero-section" id="translator">
+      <h1 class="hero-title">Free Unlimited AI Translator</h1>
+      <p class="hero-subtitle">Fast, accurate, and private translation for articles, sentences, and documents.</p>
+    </section>
+
+    <div class="translator-box">
+      <div class="toolbar">
+        <select id="sourceLang">
+          <option value="auto">Detect Language automatically</option>
+          <option value="en" selected>English</option>
+          <option value="ur">Urdu (اردو)</option>
+          <option value="hi">Hindi (हिंदी)</option>
+          <option value="ar">Arabic (العربية)</option>
+          <option value="es">Spanish (Español)</option>
+          <option value="fr">French (Français)</option>
+          <option value="de">German (Deutsch)</option>
+          <option value="zh">Chinese (中文)</option>
+          <option value="tr">Turkish (Türkçe)</option>
+          <option value="ja">Japanese (日本語)</option>
+          <option value="it">Italian (Italiano)</option>
+          <option value="ru">Russian (Русский)</option>
+          <option value="pt">Portuguese (Português)</option>
+          <option value="ko">Korean (한국어)</option>
+          <option value="bn">Bengali (বাংলা)</option>
+        </select>
+
+        <button class="swap-btn" id="swapLangBtn" title="Swap languages">⇄</button>
+
+        <select id="targetLang">
+          <option value="ur" selected>Urdu (اردو)</option>
+          <option value="en">English</option>
+          <option value="hi">Hindi (हिंदी)</option>
+          <option value="ar">Arabic (العربية)</option>
+          <option value="es">Spanish (Español)</option>
+          <option value="fr">French (Français)</option>
+          <option value="de">German (Deutsch)</option>
+          <option value="zh">Chinese (中文)</option>
+          <option value="tr">Turkish (Türkçe)</option>
+          <option value="ja">Japanese (日本語)</option>
+          <option value="it">Italian (Italiano)</option>
+          <option value="ru">Russian (Русский)</option>
+          <option value="pt">Portuguese (Português)</option>
+          <option value="ko">Korean (한국어)</option>
+          <option value="bn">Bengali (বাংলা)</option>
+        </select>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel">
+          <textarea id="sourceText" placeholder="Type or paste your text / article here..."></textarea>
+          <div class="panel-footer">
+            <span class="counter" id="sourceCounter">0 words | 0 chars</span>
+            <div class="action-group">
+              <button class="btn" id="sampleBtn">Sample Text</button>
+              <button class="btn" id="pasteBtn">Paste</button>
+              <button class="btn" id="clearBtn">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <textarea id="targetText" placeholder="Translation will appear here..." readonly></textarea>
+          <div class="panel-footer">
+            <span class="counter" id="targetCounter">0 words | 0 chars</span>
+            <div class="action-group">
+              <button class="btn" id="listenBtn">🔊 Listen</button>
+              <button class="btn" id="copyBtn">📋 Copy</button>
+              <button class="btn" id="downloadBtn">⬇ Save .txt</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <button class="btn btn-primary" id="translateBtn" style="padding: 0.75rem 2.5rem; font-size: 1.1rem;">Translate Now</button>
+      </div>
+    </div>
+
+    <div class="share-section">
+      <h3 class="share-title">Enjoying this Free AI Tool? Share it with friends!</h3>
+      <div class="social-buttons">
+        <button class="btn btn-whatsapp" id="shareWA">WhatsApp</button>
+        <button class="btn btn-facebook" id="shareFB">Facebook</button>
+        <button class="btn btn-twitter" id="shareTW">X (Twitter)</button>
+        <button class="btn btn-telegram" id="shareTG">Telegram</button>
+        <button class="btn btn-linkedin" id="shareLN">LinkedIn</button>
+      </div>
+    </div>
+
+    <section class="content-section" id="about">
+      <h2>About AI Translator Pro</h2>
+      <p>AI Translator Pro is a free, lightweight, and high-speed web application designed to translate long articles, academic documents, news stories, and everyday messages across major international languages.</p>
+      <p>Our tool requires no user registration, no login, and no account setup. Simply paste your text, select your target language, and get accurate translations in real-time.</p>
+    </section>
+
+    <section class="content-section" id="privacy">
+      <h2>Privacy Policy</h2>
+      <p>Your privacy is fundamental to us. Here is how we safeguard your information:</p>
+      <ul>
+        <li><strong>No Personal Data Collection:</strong> We do not require sign-up, email addresses, or phone numbers.</li>
+        <li><strong>No Content Storage:</strong> Texts pasted into the translator are processed instantly in your browser session and are never saved on our servers.</li>
+        <li><strong>Client-Side Processing:</strong> All translation tasks happen securely using standard encrypted API requests.</li>
+      </ul>
+    </section>
+
+    <section class="content-section" id="terms">
+      <h2>Terms of Service</h2>
+      <p>By accessing AI Translator Pro, you agree to use this tool responsibly and legally:</p>
+      <ul>
+        <li>You may use this tool for personal, educational, or commercial purposes.</li>
+        <li>Automated scraping or attempting to overload the web interface is strictly prohibited.</li>
+        <li>The service is provided "as is" without warranty of continuous uninterrupted availability.</li>
+      </ul>
+    </section>
+
+    <section class="content-section" id="disclaimer">
+      <h2>Legal Disclaimer</h2>
+      <p>While AI Translator Pro uses advanced translation models to deliver accurate results, automated translation may contain inaccuracies depending on context, dialect, or specialized terminology. AI Translator Pro and its developers shall not be held liable for any misunderstandings or financial loss resulting from relying solely on translated content.</p>
+    </section>
+
+    <section class="content-section" id="faq">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="faq-item">
+        <div class="faq-question">Is this translator 100% free?</div>
+        <p>Yes, AI Translator Pro is completely free to use without any hidden fees or word limit restrictions.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I translate long articles?</div>
+        <p>Yes! You can paste full news articles, essays, and documents into the text area.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Does it store my text?</div>
+        <p>No. We respect your privacy. None of your input or output text is stored on any server.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 AI Translator Pro. All rights reserved.</p>
+    <p><a href="#about">About</a> | <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms</a> | <a href="#disclaimer">Disclaimer</a></p>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const sourceText = document.getElementById('sourceText');
+    const targetText = document.getElementById('targetText');
+    const sourceCounter = document.getElementById('sourceCounter');
+    const targetCounter = document.getElementById('targetCounter');
+    const sourceLang = document.getElementById('sourceLang');
+    const targetLang = document.getElementById('targetLang');
+    const swapLangBtn = document.getElementById('swapLangBtn');
+    const translateBtn = document.getElementById('translateBtn');
+
+    // Theme Switcher
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.body.removeAttribute('data-theme');
+        themeToggle.textContent = '🌙 Theme';
+      } else {
+        document.body.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '☀️ Theme';
+      }
+    });
+
+    // Counters
+    function updateCounters() {
+      const srcVal = sourceText.value.trim();
+      const trgVal = targetText.value.trim();
+      
+      const srcWords = srcVal ? srcVal.split(/\s+/).length : 0;
+      const trgWords = trgVal ? trgVal.split(/\s+/).length : 0;
+
+      sourceCounter.textContent = `${srcWords} words | ${sourceText.value.length} chars`;
+      targetCounter.textContent = `${trgWords} words | ${targetText.value.length} chars`;
+    }
+
+    sourceText.addEventListener('input', updateCounters);
+
+    // Swap Languages
+    swapLangBtn.addEventListener('click', () => {
+      if (sourceLang.value === 'auto') return;
+      const tempLang = sourceLang.value;
+      sourceLang.value = targetLang.value;
+      targetLang.value = tempLang;
+
+      const tempTxt = sourceText.value;
+      sourceText.value = targetText.value;
+      targetText.value = tempTxt;
+
+      updateCounters();
+    });
+
+    // Clear Button
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      sourceText.value = '';
+      targetText.value = '';
+      updateCounters();
+    });
+
+    // Sample Text Button
+    document.getElementById('sampleBtn').addEventListener('click', () => {
+      sourceText.value = "Artificial intelligence is transforming how people communicate across the globe. By using modern translation tools, language barriers disappear effortlessly.";
+      updateCounters();
+    });
+
+    // Paste Button
+    document.getElementById('pasteBtn').addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        sourceText.value = text;
+        updateCounters();
+      } catch (err) {
+        alert('Please allow clipboard permission or paste manually using Ctrl+V / Cmd+V.');
+      }
+    });
+
+    // Translation Function
+    async function performTranslation() {
+      const text = sourceText.value.trim();
+      if (!text) {
+        alert('Please enter some text to translate.');
+        return;
+      }
+
+      translateBtn.textContent = 'Translating...';
+      translateBtn.disabled = true;
+
+      try {
+        const sl = sourceLang.value === 'auto' ? 'auto' : sourceLang.value;
+        const tl = targetLang.value;
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
+        const data = await res.json();
+        
+        let translatedText = '';
+        if (data && data[0]) {
+          data[0].forEach(item => {
+            if (item[0]) translatedText += item[0];
+          });
+        }
+
+        targetText.value = translatedText;
+        updateCounters();
+      } catch (err) {
+        alert('Translation failed. Please check your internet connection.');
+      } finally {
+        translateBtn.textContent = 'Translate Now';
+        translateBtn.disabled = false;
+      }
+    }
+
+    translateBtn.addEventListener('click', performTranslation);
+
+    // Copy Button
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      if (!targetText.value) return;
+      navigator.clipboard.writeText(targetText.value);
+      alert('Translated text copied to clipboard!');
+    });
+
+    // Download Button
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      if (!targetText.value) return;
+      const blob = new Blob([targetText.value], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'translation.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Listen / Text-to-Speech
+    document.getElementById('listenBtn').addEventListener('click', () => {
+      if (!targetText.value) return;
+      const utterance = new SpeechSynthesisUtterance(targetText.value);
+      utterance.lang = targetLang.value;
+      window.speechSynthesis.speak(utterance);
+    });
+
+    // Social Sharing
+    const shareText = "Check out this free AI Translator Pro tool!";
+    const shareUrl = window.location.href;
+
+    document.getElementById('shareWA').addEventListener('click', () => {
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank');
+    });
+
+    document.getElementById('shareFB').addEventListener('click', () => {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+    });
+
+    document.getElementById('shareTW').addEventListener('click', () => {
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+    });
+
+    document.getElementById('shareTG').addEventListener('click', () => {
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+    });
+
+    document.getElementById('shareLN').addEventListener('click', () => {
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, '_blank');
+    });
+  </script>
+</body>
+</html>
